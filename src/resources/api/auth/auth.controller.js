@@ -1,6 +1,6 @@
 import * as dotenv from "dotenv";
 import { User } from "../../../database/models";
-import { hashPassword } from "../../../helpers/auth";
+import { hashPassword, comparePassword } from "../../../helpers/auth";
 import generateToken from "../../../helpers/token";
 
 dotenv.config();
@@ -42,16 +42,39 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  // Mock User
-  const user = {
-    id: 1,
-    username: "Jean",
-    email: "jean@gmail.com",
+  const { email, password } = req.body;
+
+  const user = await User.findOne({
+    where: { email },
+  });
+
+  if (!user) {
+    return res.status(400).json({
+      status: 400,
+      message: "User doesn't exist",
+    });
+  }
+
+  if (!comparePassword(password, user.get().password)) {
+    return res.status(401).json({
+      status: 401,
+      message: "Wrong email or password",
+    });
+  }
+
+  const { password: _, ...args } = user.get({ plain: true });
+
+  const token = await generateToken({ ...args });
+
+  const data = {
+    ...args,
+    token,
   };
 
-  const token = await generateToken(user);
-
-  res.json({ token });
+  res.status(200).json({
+    status: 200,
+    data,
+  });
 };
 
 export const protectedRoute = async (req, res) => {

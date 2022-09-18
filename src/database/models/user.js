@@ -35,7 +35,6 @@ module.exports = (sequelize, DataTypes) => {
       age: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        get: () => Math.ceil(moment().diff(this.birth_date, "years")),
       },
     },
     {

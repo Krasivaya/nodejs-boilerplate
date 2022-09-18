@@ -8,3 +8,8 @@ export const signupRule = Joi.object().keys({
   gender: Joi.string().max(15).required(),
   birth_date: Joi.date(),
 });
+
+export const loginRule = Joi.object().keys({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});
