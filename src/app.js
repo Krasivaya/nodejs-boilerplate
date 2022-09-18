@@ -1,11 +1,11 @@
 import express from "express";
-import BodyParser from "body-parser";
 import { errors } from "celebrate";
 import api from "./resources/api";
 
 const app = express();
 
-app.use(BodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.use("/api", api);
 app.use(errors());

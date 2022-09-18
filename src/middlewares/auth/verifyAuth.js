@@ -17,11 +17,10 @@ const verifyAuth = async (req, res, next) => {
     process.env.JWT_SECRET || "secretkey",
     async (error, authData) => {
       if (error) return res.sendStatus(401);
-      else {
-        req.token = token;
-        req.currentUser = authData;
-        next();
-      }
+
+      req.token = token;
+      req.currentUser = authData;
+      next();
     }
   );
 };
