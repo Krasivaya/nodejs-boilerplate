@@ -77,6 +77,14 @@ export const login = async (req, res) => {
   });
 };
 
+export const logout = async (req, res) => {
+  const { token } = req;
+
+  token.update({ status: "logout" });
+
+  return res.status(200).json({ status: 200, message: "Logged out" });
+};
+
 export const protectedRoute = async (req, res) => {
   res.json({
     message: "I have been verified!",
