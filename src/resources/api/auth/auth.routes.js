@@ -1,8 +1,21 @@
 import { Router } from "express";
 import { celebrate } from "celebrate";
-import { changePassword, login, logout, signup } from "./auth.controller";
+import {
+  changePassword,
+  login,
+  logout,
+  resetCode,
+  resetPassword,
+  signup,
+} from "./auth.controller";
 import verifyAuth from "../../../middlewares/auth/verifyAuth";
-import { changePasswordRule, loginRule, signupRule } from "./auth.validator";
+import {
+  changePasswordRule,
+  loginRule,
+  resetCodeRule,
+  resetPasswordRule,
+  signupRule,
+} from "./auth.validator";
 
 const router = Router();
 
@@ -14,6 +27,12 @@ router.put(
   verifyAuth,
   celebrate({ body: changePasswordRule }),
   changePassword
+);
+router.post("/reset-code", celebrate({ body: resetCodeRule }), resetCode);
+router.post(
+  "/reset-password",
+  celebrate({ body: resetPasswordRule }),
+  resetPassword
 );
 
 export default router;
