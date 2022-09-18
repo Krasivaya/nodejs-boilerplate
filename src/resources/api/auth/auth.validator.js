@@ -18,3 +18,13 @@ export const changePasswordRule = Joi.object().keys({
   old_password: Joi.string().required(),
   new_password: Joi.string().required(),
 });
+
+export const resetCodeRule = Joi.object().keys({
+  email: Joi.string().email().required(),
+});
+
+export const resetPasswordRule = Joi.object().keys({
+  password: Joi.string().required(),
+  confirm_password: Joi.string().required(),
+  code: Joi.number().required(),
+});
