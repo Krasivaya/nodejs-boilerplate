@@ -1,9 +1,12 @@
 import { Router } from "express";
-import { login, protectedRoute } from "./auth.controller";
+import { celebrate } from "celebrate";
+import { login, protectedRoute, signup } from "./auth.controller";
 import verifyAuth from "../../../middlewares/auth/verifyAuth";
+import { signupRule } from "./auth.validator";
 
 const router = Router();
 
+router.post("/signup", celebrate({ body: signupRule }), signup);
 router.post("/login", login);
 
 // The route to protect

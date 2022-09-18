@@ -1,5 +1,5 @@
 import moment from "moment";
-import bcrypt from "bcryptjs";
+import { hashPassword, comparePassword } from "../../helpers/auth";
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
@@ -47,24 +47,24 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  User.prototype.hashPassword = (password) => {
-    return bcrypt.hashSync(password.toString(), 10);
+  User.prototype.hashPassword = function (password) {
+    return hashPassword(password);
   };
 
-  User.prototype.comparePassword = (password, hashPassword) => {
-    return bcrypt.compareSync(password, hashPassword);
+  User.prototype.comparePassword = function (password, hashPassword) {
+    return comparePassword(password, hashPassword);
   };
 
   User.beforeCreate(async (user) => {
     if (user.birth_date) {
-      const age = Math.ceil(moment().diff(this.birth_date, "years"));
+      const age = Math.ceil(moment().diff(user.birth_date, "years"));
       user.age = age;
     }
   });
 
   User.beforeUpdate(async (record) => {
     if (record.birth_date) {
-      const age = Math.ceil(moment().diff(this.birth_date, "years"));
+      const age = Math.ceil(moment().diff(user.birth_date, "years"));
       record.age = age;
     }
   });
