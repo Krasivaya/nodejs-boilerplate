@@ -85,9 +85,29 @@ export const logout = async (req, res) => {
   return res.status(200).json({ status: 200, message: "Logged out" });
 };
 
-export const protectedRoute = async (req, res) => {
-  res.json({
-    message: "I have been verified!",
-    data: req.currentUser,
+export const changePassword = async (req, res) => {
+  const {
+    body: { old_password: oldPassword, new_password: newPassword },
+    currentUser: { email },
+  } = req;
+
+  const user = await User.findOne({
+    where: { email },
+  });
+
+  if (!comparePassword(oldPassword, user.get().password)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Wrong email or password",
+    });
+  }
+
+  user.update({
+    password: hashPassword(newPassword),
+  });
+
+  res.status(200).json({
+    status: 200,
+    message: "Password have been changed successfully",
   });
 };

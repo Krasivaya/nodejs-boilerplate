@@ -63,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.beforeUpdate(async (record) => {
     if (record.birth_date) {
-      const age = Math.ceil(moment().diff(user.birth_date, "years"));
+      const age = Math.ceil(moment().diff(record.birth_date, "years"));
       record.age = age;
     }
   });

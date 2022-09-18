@@ -13,3 +13,8 @@ export const loginRule = Joi.object().keys({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 });
+
+export const changePasswordRule = Joi.object().keys({
+  old_password: Joi.string().required(),
+  new_password: Joi.string().required(),
+});
