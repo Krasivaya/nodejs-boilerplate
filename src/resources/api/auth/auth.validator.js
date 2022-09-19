@@ -5,7 +5,7 @@ export const signupRule = Joi.object().keys({
   last_name: Joi.string().max(30).required(),
   email: Joi.string().email().required(),
   password: Joi.string().required(),
-  gender: Joi.string().max(15).required(),
+  gender: Joi.string().max(15),
   birth_date: Joi.date(),
 });
 

@@ -4,14 +4,20 @@
   "description": "A boilerplate for the nodejs authentication",
   "main": "src/server.js",
   "scripts": {
+    "test": "cross-env NODE_ENV=test npm run db:reset:migrate:seed:test && jest --forceExit",
+    "test:coverage": "cross-env NODE_ENV=test npm run db:reset:migrate:seed:test && node_modules/.bin/jest --coverage",
     "dev": "babel-watch src/server.js",
+    "db:drop": "node_modules/.bin/sequelize db:drop",
     "db:create": "node_modules/.bin/sequelize db:create",
+    "db:reset": "npm run db:drop && npm run db:create",
     "db:migrate": "node_modules/.bin/sequelize db:migrate",
     "db:migrate:undo": "node_modules/.bin/sequelize db:migrate:undo",
     "db:migrate:reset": "node_modules/.bin/sequelize db:migrate:undo:all",
     "db:seed": "node_modules/.bin/sequelize db:seed:all",
     "db:seed:undo": "node_modules/.bin/sequelize db:seed:undo",
-    "db:seed:reset": "node_modules/.bin/sequelize db:seed:undo:all"
+    "db:seed:reset": "node_modules/.bin/sequelize db:seed:undo:all",
+    "db:reset:migrate:seed": "npm run db:reset && npm run db:migrate && npm run db:seed",
+    "db:reset:migrate:seed:test": "cross-env NODE_ENV=test npm run db:reset:migrate:seed"
   },
   "author": "Carine SEMWAGA",
   "license": "ISC",
@@ -30,6 +36,9 @@
     "@babel/preset-env": "^7.19.1",
     "babel-polyfill": "^6.26.0",
     "babel-watch": "^7.7.0",
-    "sequelize-cli": "^6.4.1"
+    "cross-env": "^7.0.3",
+    "jest": "^27.5.1",
+    "sequelize-cli": "^6.4.1",
+    "supertest": "^6.2.4"
   }
 }
