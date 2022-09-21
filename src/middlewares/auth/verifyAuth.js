@@ -5,7 +5,7 @@ import { comparePassword } from "../../helpers/auth";
 
 dotenv.config();
 
-const verifyAuth = ({ password = false }) => {
+const verifyAuth = ({ password = false } = { password: false }) => {
   return async (req, res, next) => {
     const authorization = req.headers["authorization"];
 
@@ -39,14 +39,19 @@ const verifyAuth = ({ password = false }) => {
             message: "Unauthorized Access",
           });
 
-        if (
-          password &&
-          !comparePassword(req.body.password, user.get().password)
-        ) {
-          return res.status(400).json({
-            status: 400,
-            message: "Wrong email or password",
-          });
+        if (password) {
+          if (!req.body.password) {
+            return res.status(400).json({
+              status: 400,
+              message: "Password is required",
+            });
+          }
+          if (!comparePassword(req.body.password, user.get().password)) {
+            return res.status(400).json({
+              status: 400,
+              message: "Wrong email or password",
+            });
+          }
         }
 
         req.token = foundToken;

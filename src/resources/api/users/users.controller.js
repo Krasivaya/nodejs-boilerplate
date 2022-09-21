@@ -1,14 +1,25 @@
-import { User } from "../../../database/models";
-import { comparePassword, hashPassword } from "../../../helpers/auth";
+import { User, Activity } from "../../../database/models";
+import { hashPassword } from "../../../helpers/auth";
 
 export const createOne = async (req, res) => {
-  const { first_name, last_name, email } = req.body;
+  const {
+    body: { first_name, last_name, email },
+    currentUser,
+  } = req;
 
-  await User.create({
+  const newUser = await User.create({
     first_name,
     last_name,
     email,
     password: hashPassword("12345"),
+  });
+
+  await Activity.create({
+    creator_id: currentUser.id,
+    resource_id: newUser.id,
+    resource: "user",
+    action: "Created",
+    description: `${currentUser.first_name} ${currentUser.last_name} created a new user ${first_name} ${last_name}`,
   });
 
   return res.status(201).json({
@@ -80,25 +91,28 @@ export const getOne = async (req, res) => {
 export const updateOne = async (req, res) => {
   const {
     body: { first_name, last_name, email, birth_date, gender },
-    currentUser: { email: currentUserEmail },
+    currentUser,
   } = req;
 
-  if (currentUserEmail !== email) {
-    return res.status(403).json({
-      status: 403,
-      message: "Wrong email or password",
-    });
-  }
+  const user = await User.findOne({ where: { email } });
 
-  await User.update(
+  await user.update(
     {
       first_name,
       last_name,
       birth_date,
       gender,
     },
-    { where: { email: currentUserEmail }, individualHooks: true }
+    { where: { email: currentUser.email }, individualHooks: true }
   );
+
+  await Activity.create({
+    creator_id: currentUser.id,
+    resource_id: user.id,
+    resource: "user",
+    action: "Updated",
+    description: `${currentUser.first_name} ${currentUser.last_name} updated profile information`,
+  });
 
   return res.status(200).json({
     status: 200,
