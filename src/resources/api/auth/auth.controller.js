@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 import moment from "moment";
 import { Op } from "sequelize";
-import { User, VerificationCode } from "../../../database/models";
+import { User, VerificationCode, Activity } from "../../../database/models";
 import { hashPassword, comparePassword } from "../../../helpers/auth";
 import randomCode from "../../../helpers/randomCode";
 import generateToken from "../../../helpers/token";
@@ -109,6 +109,14 @@ export const changePassword = async (req, res) => {
     password: hashPassword(newPassword),
   });
 
+  await Activity.create({
+    creator_id: user.id,
+    resource_id: user.id,
+    resource: "user",
+    action: "Update",
+    description: `${user.first_name} ${user.last_name} has changed their password`,
+  });
+
   res.status(200).json({
     status: 200,
     message: "Password have been changed successfully",
@@ -150,6 +158,14 @@ export const resetCode = async (req, res) => {
     code,
   });
 
+  await Activity.create({
+    creator_id: user.id,
+    resource_id: user.id,
+    resource: "user",
+    action: "Reset",
+    description: `${user.first_name} ${user.last_name} has requested for a reset code`,
+  });
+
   return res.status(201).json({
     status: 201,
     data: {
@@ -181,14 +197,19 @@ export const resetPassword = async (req, res) => {
     });
   }
 
-  await User.update(
-    {
-      password: hashPassword(password),
-    },
-    {
-      where: { email: foundCode.email },
-    }
-  );
+  const user = await User.findOne({ where: { email } });
+
+  await user.update({
+    password: hashPassword(password),
+  });
+
+  await Activity.create({
+    creator_id: user.id,
+    resource_id: user.id,
+    resource: "user",
+    action: "Reset",
+    description: `${user.first_name} ${user.last_name} has resetted their password`,
+  });
 
   return res.status(201).json({
     status: 201,

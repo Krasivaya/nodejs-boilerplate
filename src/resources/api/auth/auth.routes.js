@@ -21,10 +21,10 @@ const router = Router();
 
 router.post("/signup", celebrate({ body: signupRule }), signup);
 router.post("/login", celebrate({ body: loginRule }), login);
-router.post("/logout", verifyAuth, logout);
+router.post("/logout", verifyAuth(), logout);
 router.put(
   "/change-password",
-  verifyAuth,
+  verifyAuth(),
   celebrate({ body: changePasswordRule }),
   changePassword
 );

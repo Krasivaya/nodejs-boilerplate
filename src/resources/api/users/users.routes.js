@@ -18,11 +18,11 @@ router
     celebrate({ body: createOneRule }),
     createOne
   )
-  .get(verifyAuth, celebrate({ query: getAllRule }), getAll);
+  .get(verifyAuth(), celebrate({ query: getAllRule }), getAll);
 
 router
   .route("/:id")
-  .get(verifyAuth, celebrate({ params: getOneRule }), getOne)
+  .get(verifyAuth(), celebrate({ params: getOneRule }), getOne)
   .put(verifyAuth({ password: true }), updateOneRule, updateOne);
 
 export default router;
