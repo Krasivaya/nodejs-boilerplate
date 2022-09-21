@@ -21,7 +21,7 @@ describe("Account login", () => {
   });
 
   describe("00004 - login to the user account", () => {
-    test("00004-1 - ahould not be able to login with non existing email", async () => {
+    test("00004-1 - should not be able to login with non existing email", async () => {
       const res = await request(app).post("/api/auth/login").send({
         email: "nice@gmail.com",
         password: "User@123",

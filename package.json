@@ -4,7 +4,7 @@
   "description": "A boilerplate for a RESTful API with NodeJS, Express, PostgreSQL and Sequelize.",
   "main": "src/server.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test npm run db:reset:migrate:seed:test && jest --forceExit",
+    "test": "cross-env NODE_ENV=test npm run db:reset:migrate:seed:test && jest -i --forceExit",
     "test:coverage": "cross-env NODE_ENV=test npm run db:reset:migrate:seed:test && node_modules/.bin/jest --coverage",
     "dev": "babel-watch src/server.js",
     "db:drop": "node_modules/.bin/sequelize db:drop",
