@@ -1,0 +1,30 @@
+name: Predeploy
+
+on: [push]
+
+jobs:
+  pre-deploy:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:12-alpine
+        env:
+          POSTGRES_USER: save_user
+          POSTGRES_PASSWORD: save_password
+          POSTGRES_DB: save_test
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 25s --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        env:
+          DATABASE_URL_TEST: postgres://save_user:save_password@localhost:5432/save_test
+          JWT_SECRET_KEY: ${{secrets.JWT_SECRET_KEY}}
+        run: npm test
