@@ -30,7 +30,7 @@ describe("Account login", () => {
       expect(res.body).toHaveProperty("message");
     });
 
-    test("00004-2 - ahould not be able to login with wrong password", async () => {
+    test("00004-2 - should not be able to login with wrong password", async () => {
       const res = await request(app).post("/api/auth/login").send({
         email: "nice@test.com",
         password: "Wrong@123",
@@ -39,7 +39,7 @@ describe("Account login", () => {
       expect(res.body).toHaveProperty("message");
     });
 
-    test("00004-3 - ahould be able to login successfully", async () => {
+    test("00004-3 - should be able to login successfully", async () => {
       const res = await request(app).post("/api/auth/login").send({
         email: "nice@test.com",
         password: "User@123",
