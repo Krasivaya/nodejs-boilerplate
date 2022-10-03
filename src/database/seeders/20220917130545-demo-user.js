@@ -7,7 +7,8 @@ module.exports = {
         first_name: "Jean",
         last_name: "Mika",
         email: "jean@mika.com",
-        password: "12345",
+        password:
+          "$2a$10$2Gl48HwEiXignxGRZR0Tp.pxH0BKnXQoSZnyhQANGN6.4VpMF3UKe",
         gender: "male",
         age: 22,
         birth_date: new Date("2000-01-01"),

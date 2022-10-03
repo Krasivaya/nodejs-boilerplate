@@ -9,11 +9,19 @@ const verifyAuth = ({ password = false } = { password: false }) => {
   return async (req, res, next) => {
     const authorization = req.headers["authorization"];
 
-    if (!authorization) return res.sendStatus(403);
+    if (!authorization)
+      return res.status(403).json({
+        status: 403,
+        message: "Forbidden Access",
+      });
 
     const token = authorization.split(" ")[1];
 
-    if (!token) return res.sendStatus(401);
+    if (!token)
+      return res.status(401).json({
+        status: 401,
+        message: "Unauthorized Access",
+      });
 
     const foundToken = await Token.findOne({
       where: { token, status: "active" },

@@ -197,7 +197,15 @@ export const resetPassword = async (req, res) => {
     });
   }
 
-  const user = await User.findOne({ where: { email } });
+  const user = await User.findOne({ where: { email: foundCode.email } });
+
+  if (comparePassword(password, user.get().password)) {
+    return res.status(400).json({
+      status: 400,
+      message:
+        "Your new password must be different from your previous password",
+    });
+  }
 
   await user.update({
     password: hashPassword(password),
