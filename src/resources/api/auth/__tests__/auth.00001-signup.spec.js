@@ -8,14 +8,14 @@ const user = {
 
 describe("Account signup", () => {
   describe("00001 - send user required data", () => {
-    test("00001-1 - should not be able to signup without user first name", async () => {
+    it("00001-1 - should not be able to signup without user first name", async () => {
       const res = await request(app).post("/api/auth/signup").send(user);
       expect(res.status).toBe(400);
       expect(res.body).toHaveProperty("validation");
       expect(res.body.validation.body.keys).toEqual(["first_name"]);
     });
 
-    test("00001-2 - should not be able to signup without user last name", async () => {
+    it("00001-2 - should not be able to signup without user last name", async () => {
       const res = await request(app)
         .post("/api/auth/signup")
         .send({
@@ -27,7 +27,7 @@ describe("Account signup", () => {
       expect(res.body.validation.body.keys).toEqual(["last_name"]);
     });
 
-    test("00001-3 - should not be able to signup without email", async () => {
+    it("00001-3 - should not be able to signup without email", async () => {
       const res = await request(app)
         .post("/api/auth/signup")
         .send({
@@ -40,7 +40,7 @@ describe("Account signup", () => {
       expect(res.body.validation.body.keys).toEqual(["email"]);
     });
 
-    test("00001-4 - should not be able to signup without password", async () => {
+    it("00001-4 - should not be able to signup without password", async () => {
       const res = await request(app)
         .post("/api/auth/signup")
         .send({
@@ -56,7 +56,7 @@ describe("Account signup", () => {
   });
 
   describe("00002 - create user account", () => {
-    test("00002-1 - should not signup with an existing email", async () => {
+    it("00002-1 - should not signup with an existing email", async () => {
       const res = await request(app)
         .post("/api/auth/signup")
         .send({
@@ -70,7 +70,7 @@ describe("Account signup", () => {
       expect(res.body).toHaveProperty("message");
     });
 
-    test("00002-2 - should be able to signup", async () => {
+    it("00002-2 - should be able to signup", async () => {
       const res = await request(app)
         .post("/api/auth/signup")
         .send({
